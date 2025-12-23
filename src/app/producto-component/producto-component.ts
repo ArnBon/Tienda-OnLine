@@ -10,9 +10,7 @@ export class ProductoComponent {
 
   titulo = 'Listado de Productos'
 
-  productos = {
-    descripcion: 'Nuevo Producto',
-    precio: '$100'
-  }
+    descripcion = 'Nuevo Producto';
+    precio = '101.00'; 
 
 }

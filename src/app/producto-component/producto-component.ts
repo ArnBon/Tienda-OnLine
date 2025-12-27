@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ProductoModel } from './productoModel';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-producto-component',
-  imports: [],
+  selector: '[app-producto-component]',
+  imports: [CommonModule],
   templateUrl: './producto-component.html',
   styleUrl: './producto-component.css',
 })
 export class ProductoComponent {
 
-  titulo = 'Listado de Productos'
-
-    descripcion = 'Nuevo Producto';
-    precio = '101.00'; 
+ @Input() productoModel!: ProductoModel;
 
 }

@@ -1,62 +1,21 @@
 <div class="container mt-3">
-    <h3 class="text-warning">Listado de Productos</h3>
-    <!-- <ul>
-        @for (producto of productos; track producto) {
-            <li class="list-group-item list-group-item-light">
-                {{producto.descripcion}}
-                ${{producto.precio}}
-            </li>
-        }
-    </ul> -->
+  <h3 class="text-warning">Listado de Productos</h3>
 
-<table class="table">
-  <thead>
-    <tr>
-      <!-- <th scope="col">#</th> -->
-      <th scope="col">Descripción</th>
-      <th scope="col">Precio</th>
-      
-    </tr>
-  </thead>
-  <tbody>
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Descripción</th>
+        <th scope="col">Precio</th>
+      </tr>
+    </thead>
+    <tbody>
 
-      @for (producto of productos; track producto) {
-    <tr>
-      <!-- <th scope="row">1</th> -->
-      <td>{{producto.descripcion}}</td>
-      <td>{{producto.precio}}</td>
-    </tr>
-}
+      @for (productoElemento of productos; track productoElemento) {
+      <tr app-producto-component [productoModel]="productoElemento"></tr>
+      }
 
-  </tbody>
-</table>
+    </tbody>
+  </table>
 
-
-
-    
-
-    <h5 class="text-success mt-3">Agregar Nuevo Producto</h5>
-
-    <form class="d-flex justify-content-between align-items-center my-4 w-50 mx-auto">
-        <input type="text" id="descripcion" name="descripcion"
-            placeholder="Descripción Producto" class="form-control me-2 w-75"
-            autocomplete="off"
-            [(ngModel)] = "descripcionInput"/>
-
-
-        <input type="number" d="precio" name="precio"
-            placeholder="Precio" class="form-control me-2 w-25"
-            [(ngModel)] = "precioInput"/>
-
-
-    </form>
-
-    <button type="submit" class="btn btn-primary"
-    (click)="agregarProducto()">Agregar
-    </button>
-
-
-
-
-    
+  <app-formulario-component></app-formulario-component>
 </div>

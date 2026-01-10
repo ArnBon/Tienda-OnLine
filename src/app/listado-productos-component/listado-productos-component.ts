@@ -15,7 +15,11 @@ export class ListadoProductosComponent {
 
   productos: ProductoModel[] = [];
 
-  constructor(private productoService: ProductoService){}
+  constructor(private productoService: ProductoService){
+    this.productoService.detalleProductoEmitter.subscribe(producto => {
+      alert(`Producto: ${producto.descripcion}\nPrecio: ${producto.precio} $`);
+    });
+  }
 
   ngOnInit(){
     this.productos = this.productoService.productos;

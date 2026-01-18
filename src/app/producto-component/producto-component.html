@@ -1,3 +1,6 @@
 <td>{{productoModel.descripcion}}</td>
 <td>{{productoModel.precio}} $</td>
-<td><button (click)="emitirDetalleProducto()">Ver detalle</button></td>
+<td><button (click)="emitirDetalleProducto()">Ver detalle</button> |
+    <button (click)="editarProducto(productoModel.id!)">Editar</button>
+</td>
+

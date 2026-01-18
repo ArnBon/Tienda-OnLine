@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ProductoModel } from './productoModel';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../producto-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: '[app-producto-component]',
@@ -13,11 +14,18 @@ export class ProductoComponent {
 
  @Input() productoModel!: ProductoModel;
 
- constructor(private productoService: ProductoService) { }
+ constructor(private productoService: ProductoService,
+              private router: Router
+ ) { }
 
   emitirDetalleProducto() {
     //usamos el eventEmitter del servicio para emitir el producto seleccionado
     this.productoService.detalleProductoEmitter.emit(this.productoModel);
+  }
+
+  editarProducto(id: number){
+    //pasar el id del producto para editarlo
+    this.router.navigate(['/editar', id]);
   }
 
 }

@@ -15,15 +15,17 @@ import { FormsModule } from '@angular/forms';
 })
 export class ListadoProductosComponent {
 
-  productos: ProductoModel[] = [];
+  // productos: ProductoModel[] = [];
+  productos: {[llave:string]:ProductoModel} = {};
 
   constructor(private productoService: ProductoService,
               private router: Router){}
 
   ngOnInit(){
-    this.productos = this.productoService.productos;
-
+    this.cargarProducto();
   }
+
+  cargarProducto(){}
 
   agregarProducto(){
     this.router.navigate(['agregar']);

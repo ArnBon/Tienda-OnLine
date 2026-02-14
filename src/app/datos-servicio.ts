@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,6 +6,10 @@ import { Injectable } from '@angular/core';
 })
 export class DatosServicio {
 
-  url = 
+  url = 'https://tienda-online-37839-default-rtdb.firebaseio.com/'
+
+constructor(private httpClient: HttpClient){}
+
+
 
 }

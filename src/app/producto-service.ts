@@ -1,59 +1,56 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { ProductoModel } from './producto-component/productoModel';
+import { DatosServicio } from './datos-servicio';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductoService {
-    //Variable para el id siguiente y unico
-    private idSiguiente = 1;
 
-   productos: ProductoModel[] = [ ];
 
-   constructor() {
-    //inicializo con algunos productos
-    this.inicializarProductos();
-   }
+   productos: {[llave:string]: ProductoModel} = { }; //diccionario con claves unicas generadas por firebase
+   productosActualizados = new Subject<{[llave: string]: ProductoModel}>(); //Observable para notificar cambios en la lista de productos
 
-   private inicializarProductos(){
-     const producto1 = new ProductoModel(this.idSiguiente++, 'Camisa', 29.99 );
-     const producto2 = new ProductoModel(this.idSiguiente++, 'Pantalones', 49.99 );
-     const producto3 = new ProductoModel(this.idSiguiente++, 'Zapatos', 79.99 );
-     //se agregan al array de productos
-     this.productos.push(producto1, producto2, producto3);
-   }
+   constructor(private datosServicio: DatosServicio) {}
 
-detalleProductoEmitter = new EventEmitter<ProductoModel>();
+  detalleProductoEmitter = new EventEmitter<ProductoModel>();
 
-  agregarProductoService(producto: ProductoModel){
-    if (producto.id === null) {
-      producto.id = this.idSiguiente++;
-      this.productos.push(producto);
+  obtenerProductos(){
+  return this.datosServicio.listarProductos();
+}
+
+  setProductos(productos: {[llave:string]: ProductoModel}){
+    this.productos = productos;
+    this.productosActualizados.next(this.productos); //notificar a los suscriptores que la lista de productos ha sido actualizada
+  }
+
+  guardarProductoService(producto: ProductoModel, llave: string | null = null){
+    if (llave === null) {
+      //agregar nuevo producto
+      this.datosServicio.agregarProducto(producto).subscribe(() => {
+        this.refrescarProductos();
+      });
     } else {
-      const index = this.productos.findIndex(p => p.id === producto.id);
-      if(index !== -1){
-        this.productos[index] = producto;
-      }
+      this.datosServicio.modificarProducto(producto, llave).subscribe(() => {
+        this.refrescarProductos();
+      });
     }
   }
 
-
-  getProductoById(id: number): ProductoModel | undefined{
-    return this.productos.find(productos => productos.id === id);
+  getProductoByLlave(llave: string): ProductoModel | undefined{
+    return this.productos[llave];
   }
 
-
-  eliminarProductoService(id: number){
-    const index = this.productos.findIndex(productos => productos.id === id);
-    if (index !== -1) {
-      this.productos.splice(index, 1);
-    }
+  eliminarProductoService(llave: string){
+    this.datosServicio.eliminarProducto(llave).subscribe(() => {
+      this.refrescarProductos();
+    });
   }
 
-
-
-
-
-
-
+  refrescarProductos(){
+    this.obtenerProductos().subscribe((productos: {[llave:string]: ProductoModel}) => {
+      this.setProductos(productos); //actualizar el diccionario de productos
+    });
+  }
 }

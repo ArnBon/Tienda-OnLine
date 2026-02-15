@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './formulario-component.css',
 })
 export class FormularioComponent {
-    productId: number | null = null;
+    llaveProducto: string | null = null;
     descripcionInput: string = '';
     precioInput: number | null = null;
 
@@ -19,44 +19,40 @@ export class FormularioComponent {
                 private router: Router,
                 private route: ActivatedRoute){}
 
-    ngOnInit(){
+  ngOnInit(){
       //verificar si hay un id en la ruta
-      const id = this.route.snapshot.paramMap.get('id');
-      if (id){
+      const llave = this.route.snapshot.paramMap.get('llave');
+      if (llave){
         //cargar el producto desde el servicio
-        const producto = this.productoService.getProductoById(Number(id));
+        const producto = this.productoService.getProductoByLlave(llave);
         if(producto){
-          this.productId = producto.id;
+          this.llaveProducto = llave;
           this.descripcionInput = producto.descripcion;
           this.precioInput = producto.precio;
-        }
       }
     }
+  }
 
 
-guardarProducto(evento: Event){
-    evento.preventDefault(); //evitar que se recargue la pagina
+  guardarProducto(evento: Event){
 
     //validar que sean valores correctos
     if (this.descripcionInput.trim() === '' || this.precioInput == null || this.precioInput <= 0) {
       console.log('Debe ingresar una descripción y un precio válido');
       return;
     }
-
-    const producto = new ProductoModel(this.productId, this.descripcionInput, this.precioInput);
+    const producto = new ProductoModel( this.descripcionInput, this.precioInput);
     //agregamos el nuevo producto usando el servicio
-    this.productoService.agregarProductoService(producto); //esto viene del servicio
-
+    this.productoService.guardarProductoService(producto, this.llaveProducto); //esto viene del servicio
     //Limpiar campos
    this.limpiarFormulario();
-
     //navegar a la lista de productos
     this.router.navigate(['/']);
   }
 
   eliminarProducto(){
-    if(this.productId !== null){
-      this.productoService.eliminarProductoService(this.productId);
+    if(this.llaveProducto !== null){
+      this.productoService.eliminarProductoService(this.llaveProducto);
       this.limpiarFormulario();
       this.router.navigate(['/']);
     }
@@ -66,8 +62,8 @@ guardarProducto(evento: Event){
     this.router.navigate(['/']);
   }
 
-    limpiarFormulario(){
-    this.productId = null;
+  limpiarFormulario(){
+    this.llaveProducto = null;
     this.descripcionInput = '';
     this.precioInput = null;
   }

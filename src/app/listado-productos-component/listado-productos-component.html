@@ -12,8 +12,10 @@
       </tr>
     </thead>
     <tbody>
-      @for (productoElemento of productos; track productoElemento) {
-      <tr app-producto-component [productoModel]="productoElemento"></tr>
+      @for (llave of obtenerLlaves(); track llave) {
+        @if(productos[llave]) {
+          <tr app-producto-component [productoModel]="productos[llave]" [llave]="llave"></tr>
+        }
       }
     </tbody>
   </table>
